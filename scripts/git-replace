@@ -1,0 +1,17 @@
+#!/bin/bash
+#~/.scripts/gms
+#Author: Andrew Sellers <andrew.sellers@gradesfirst.com>
+#script which pushes current non-master/non-staging branch to 
+# origin then checkouts staging, pulls staging, and merges 
+# the feature branch to staging
+#e.g. gms
+
+old=$1
+new=$2
+
+for file in $(git grep $old | cut -d':'  -f 1 | uniq)
+do
+  echo "replacing '$old' with '$new' in '$file'"
+  sed -i -e "s/$old/$new/g" $file
+done
+

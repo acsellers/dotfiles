@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sftp staging <<-
+cd /mnt/tmp
+get developer.sql.gz
+END

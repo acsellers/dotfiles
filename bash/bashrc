@@ -1,0 +1,44 @@
+export PATH=/Users/andrewsellers/.rbenv/bin:/usr/local/bin:/usr/local/sbin:$PATH
+eval "$(rbenv init -)"
+export PATH=/Users/andrewsellers/bin:/usr/local/bin:/usr/local/sbin:$PATH
+
+alias ff='cd ~/Projects/ff'
+alias ffl='tail -f ~/Projects/ff/log/development.log'
+alias gf='cd ~/Projects/gradesfirst'
+alias gfl='tail -f ~/Projects/gradesfirst/log/development.log'
+
+alias fl='tail -f log/development.log'
+alias less='less -R'
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+    . `brew --prefix`/etc/bash_completion
+fi
+
+source ~/.git-flow-completion.sh
+
+PS1='\W$(__git_ps1 "(%s)") \u\$ '
+
+alias ctags='/usr/local/bin/ctags -R .'
+alias vim='/usr/local/bin/vim'
+
+alias rt='rake test'
+alias test_prep='rm test/klass_variables.rb;bundle exec rake db:schema:dump;bundle exec rake db:test:prepare'
+
+alias gs='git status'
+alias gm='git merge'
+alias gc='git checkout'
+alias gu='git reset --soft HEAD^'
+alias gd='git branch -d'
+alias gp='git cherry-pick'
+
+alias gaa='git add app'
+alias gam='git add db/migrate'
+alias gstart='git checkout master && git pull && git branch '
+alias ds='ey deploy -e staging -r staging2'
+
+alias rr='git rebase --continue'
+
+export GOROOT=/usr/local/Cellar/go/1/
+alias gg='export GOPATH=`pwd`'
+alias js='node'
+alias ls='ls -alG'
+alias gy='yard --exclude db/migrate --exclude test --exclude vendor --exclude db/conversion --plugin yard-tomdoc doc /Users/andrewsellers/Projects/gradesfirst'

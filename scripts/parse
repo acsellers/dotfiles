@@ -1,0 +1,106 @@
+#!/usr/bin/python
+
+import sys,csv,string
+
+student_ids = dict()
+alternate_ids = dict()
+students = dict()
+professors = dict()
+errors = dict()
+
+def check_row(row_data,line_num):
+    if len(row_data) == 0:
+        add_error(line_num, "Blank row error on lines: ")
+    elif line_num != 1:
+        if len(row_data) != 39:
+            add_error(line_num, "Column number error")
+        if row_data[0] != "":
+            check_student_id(row_data[0],line_num)
+        else:
+            add_error(line_num, "Blank student id on lines ")
+        if len(row_data) >= 37:
+            check_alt_id(row_data[36],line_num)
+        else:
+            add_error(line_num, "Blank alternate student id on lines ")
+    else:
+        print row_data
+
+def check_student_id(id,line_num):
+    if id in student_ids:
+            student_ids[id]+= 1
+    else:
+        student_ids[id] = 1
+        if not str(id).isalnum():
+            add_error(str(id), "Non alphanumeric id: ")
+
+def check_alt_id(id,line_num):
+    if id.strip() != "":
+        if id in alternate_ids:
+            alternate_ids[id] += 1
+        else:
+            alternate_ids[id] = 1
+        if not str(id).isalnum():
+            add_error(str(id), "Non alphanumeric alternate id: ")
+
+def check_generated_data():
+    for student_id in student_ids:
+        if student_ids[student_id] > 10:
+            add_error(str(student_id) + '-' + str(student_ids[student_id]),
+                    "Too many enrollments for students: ")
+    for alternate_id in alternate_ids:
+        if alternate_ids[alternate_id] > 10:
+            add_error(str(alternate_id) + '-' + str(alternate_ids[alternate_id]),
+                    "Too many enrollments for alternate id: ")
+
+def check_line_format(row,line_num):
+    if row.endswith('" \n'):
+        add_error(str(line_num),"Extra space at end of line on: ")
+    try:
+        row.index('""')
+        add_error(str(line_num),"Possible multi \" on lines ")
+    except ValueError:
+        #we didn't find any problems
+        pass
+    if row != "".join(c for c in row if c in string.printable):
+        add_error(str(line_num),"Possible non-printable characters on lines ")
+
+
+
+
+def add_error(line_num, error):
+    if error in errors:
+        errors[error] += "," + str(line_num)
+    else:
+        errors[error] = str(line_num)
+
+def read_errors():
+    if errors == {}:
+        print "No Errors Found"
+    else:
+        for error in errors:
+            if len(errors[error]) > 250:
+                print error + reduce(lambda x, y : x+','+y,errors[error].split(',')[:25]) + " and many more"
+            else:
+                print error + errors[error]
+
+
+if __name__ == "__main__":
+    file_name = sys.argv[1]
+
+    line_no = 0
+    with open(file_name) as input_file:
+        for row in csv.reader(input_file):
+            line_no +=1
+            check_row(row,line_no)
+
+    line_no = 1
+    with open(file_name) as input_file:
+        for line in input_file:
+            check_line_format(line,line_no)
+            line_no += 1
+
+    check_generated_data()
+
+    read_errors()
+
+

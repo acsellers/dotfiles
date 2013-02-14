@@ -1,0 +1,17 @@
+#!/bin/bash
+#~/.scripts/gms
+#Author: Andrew Sellers <andrew.sellers@gradesfirst.com>
+#script which pushes current non-master/non-staging branch to 
+# origin then checkouts staging, pulls staging, and merges 
+# the feature branch to staging
+#e.g. gms
+
+branch_name=`git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3`
+
+git stash
+git push origin $branch_name
+git checkout staging -f
+git pull
+git merge $branch_name
+git push origin staging
+git checkout $branch_name
