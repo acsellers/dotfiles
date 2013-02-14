@@ -1,0 +1,6 @@
+My Dotfiles
+
+I've organized most of my vim things, my bash things and my scripts in this git repo, so eventually it can be
+automatically deployed. Not happening yet, but at least I've got a place to add them.
+
+Still plenty of things missing from scripts, but vim and bash are mostly there
