@@ -1,0 +1,10 @@
+#!/bin/sh
+
+f=$(basename $1 .go.haml)
+haml $1 > $f.html
+
+if grep -R "{{content}}" "$f.html"
+then
+  sed -n '/{{content}}/q;p' $f.html > $f-upper.html
+  sed -n '/{{content}}/{:a;n;p;ba}' $f.html > $f-lower.html
+fi
